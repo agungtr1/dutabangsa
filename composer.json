@@ -8,12 +8,13 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-dompdf": "^0.8.0",
         "guzzlehttp/guzzle": "~6.0",
+        "khill/lavacharts": "3.0.*",
         "laravel/framework": "5.3.*",
         "laravelcollective/html": "~5.3",
         "maatwebsite/excel": "~2.1",
+        "rap2hpoutre/laravel-log-viewer": "^0.10.4",
         "santigarcor/laratrust": "3.0.*",
-        "yajra/laravel-datatables-oracle": "~6.0",
-        "khill/lavacharts": "3.0.*"
+        "yajra/laravel-datatables-oracle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
