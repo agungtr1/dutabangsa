@@ -1,0 +1,1 @@
+<a href="{{ $edit_url }}" class="btn btn-xs btn-info"><i class="fa fa-btn fa-pencil"></i> Ubah</a>
