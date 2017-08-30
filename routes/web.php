@@ -48,6 +48,10 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth','role:admin']], function 
 	// 	'uses' => 'DatapesertaController@index'
 	// ]);
 	Route::get('/getdata', 'TestController@getdata');
+	Route::post('datapeserta/filter', [
+		'as' => 'datapeserta.filter',
+		'uses' => 'DatapesertaController@filterdata'
+	]);
 });
 
 Route::group(['prefix'=>'nonadmin', 'middleware'=>['auth','role:user']], function () {
@@ -67,6 +71,10 @@ Route::group(['prefix'=>'nonadmin', 'middleware'=>['auth','role:user']], functio
 	Route::post('export/alldatapeserta', [
 		'as' => 'export.listdatapesertaall.post',
 		'uses' => 'DatainputbyuserController@exportAll'
+	]);
+	Route::post('alldatapeserta/filter', [
+		'as' => 'listdatapeserta.filter',
+		'uses' => 'DatainputbyuserController@filterdata'
 	]);
 });
 

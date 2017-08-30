@@ -70,15 +70,15 @@ class HomeController extends Controller
                 $datajeniskelamin = Peserta::groupBy('jeniskelamin')->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
             }
             $reasons->addStringColumn('Jenis Kelamin')
-                ->addNumberColumn('Percent');
+                ->addNumberColumn('Jumlah');
             foreach($datajeniskelamin as $n){
                 $reasons->addRow(array($n->jeniskelamin,$n->j_k));
             }
 
-            $donutchart = \Lava::DonutChart('jeniskelamin', $reasons, [
+            /*$donutchart = \Lava::DonutChart('jeniskelamin', $reasons, [
                             'title' => 'Jenis Kelamin'
-                        ]);
-
+                        ]);*/
+             \Lava::BarChart('jeniskelamin', $reasons);
 
             //Latar Belakang
             $reasons2 = \Lava::DataTable();
@@ -104,7 +104,7 @@ class HomeController extends Controller
             }
 
 
-            \Lava::PieChart('latarbelakang', $reasons2, [
+            /*\Lava::PieChart('latarbelakang', $reasons2, [
                 'title'  => 'Latar Belakang',
                 'is3D'   => true,
                 'slices' => [
@@ -112,7 +112,8 @@ class HomeController extends Controller
                     ['offset' => 0.25],
                     ['offset' => 0.3]
                 ]
-            ]);
+            ]);*/
+            \Lava::BarChart('latarbelakang', $reasons2);
 
             //Level Jabatan
             $reasons3 = \Lava::DataTable();
@@ -136,7 +137,7 @@ class HomeController extends Controller
                 $reasons3->addRow(array($n->leveljabatan,$n->jab));
             }
 
-            \Lava::PieChart('jabatan', $reasons3, [
+            /*\Lava::PieChart('jabatan', $reasons3, [
                 'title'  => 'Jabatan',
                 'is3D'   => true,
                 'slices' => [
@@ -144,7 +145,8 @@ class HomeController extends Controller
                     ['offset' => 0.25],
                     ['offset' => 0.3]
                 ]
-            ]);
+            ]);*/
+            \Lava::BarChart('jabatan', $reasons3);
 
             //Usia
             $reasons4 = \Lava::DataTable();
@@ -170,9 +172,16 @@ class HomeController extends Controller
             }
 
 
-            \Lava::DonutChart('usia', $reasons4, [
+            /*\Lava::DonutChart('usia', $reasons4, [
                             'title' => 'Usia'
-                        ]);
+                        ]);*/
+            \Lava::ColumnChart('usia', $reasons4, [
+                'title' => 'Usia',
+                'titleTextStyle' => [
+                    'color'    => '#eb6b2c',
+                    'fontSize' => 14
+                ]
+            ]);
 
             //jenisindustri
             $reasons5 = \Lava::DataTable();
@@ -198,9 +207,10 @@ class HomeController extends Controller
             }
 
 
-            \Lava::DonutChart('jenisindustri', $reasons5, [
+            /*\Lava::DonutChart('jenisindustri', $reasons5, [
                             'title' => 'Jenis Industri'
-                        ]);
+                        ]);*/
+            \Lava::BarChart('jenisindustri', $reasons5);
 
             //universitas
             $reasons6 = \Lava::DataTable();
@@ -226,9 +236,10 @@ class HomeController extends Controller
             }
 
 
-            \Lava::DonutChart('universitas', $reasons6, [
+           /* \Lava::DonutChart('universitas', $reasons6, [
                             'title' => 'Universitas'
-                        ]);
+                        ]);*/
+            \Lava::BarChart('universitas', $reasons6);
 
 
             //Jurusan
@@ -253,13 +264,21 @@ class HomeController extends Controller
                 $reasons7->addRow(array($n->jurusan,$n->jur));
             }
 
-            \Lava::PieChart('jurusan', $reasons7, [
+            /*\Lava::PieChart('jurusan', $reasons7, [
                 'title'  => 'Jurusan',
                 'is3D'   => true,
                 'slices' => [
                     ['offset' => 0.2],
                     ['offset' => 0.25],
                     ['offset' => 0.3]
+                ]
+            ]);*/
+
+            \Lava::ColumnChart('jurusan', $reasons7, [
+                'title' => 'Jurusan',
+                'titleTextStyle' => [
+                    'color'    => '#eb6b2c',
+                    'fontSize' => 14
                 ]
             ]);
 

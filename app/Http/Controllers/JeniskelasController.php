@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Jeniskelas;
-use Yajra\Datatables\Html\Builder;
-use Yajra\Datatables\DataTables;
+use yajra\Datatables\Html\Builder;
+use yajra\Datatables\DataTables;
 use Session;
 
 class JeniskelasController extends Controller
@@ -17,7 +17,7 @@ class JeniskelasController extends Controller
      */
     public function index(Request $request, Builder $htmlBuilder)
     {
-        if($request->ajax()){
+        /*if($request->ajax()){
             $jeniskelas = Jeniskelas::select(['id', 'name']);
             // return Datatables::of($jeniskelas)->make(true);
             return Datatables::of($jeniskelas)->addColumn('action', function($jeniskelas){
@@ -31,9 +31,9 @@ class JeniskelasController extends Controller
         }
 
         // $html = $htmlBuilder->addColumn(['data'=>'name', 'name'=>'name', 'title'=>'Nama']);
-        $html = $htmlBuilder->addColumn(['data'=>'name', 'name'=>'name', 'title'=>'Nama'])->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);
-
-        return view('jeniskelas.index')->with(compact('html'));
+        $html = $htmlBuilder->addColumn(['data'=>'name', 'name'=>'name', 'title'=>'Nama'])->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);*/
+        $jeniskelas = Jeniskelas::all();
+        return view('jeniskelas.index')->with(compact('jeniskelas'));
     }
 
     /**

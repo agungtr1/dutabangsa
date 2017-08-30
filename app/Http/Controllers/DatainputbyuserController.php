@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Yajra\Datatables\Html\Builder;
-use Yajra\Datatables\DataTables;
+use yajra\Datatables\Html\Builder;
+use yajra\Datatables\DataTables;
 use App\Peserta;
 use App\Materi;
 use App\Jeniskelas;
@@ -25,7 +25,7 @@ class DatainputbyuserController extends Controller
      */
     public function index(Request $request, Builder $htmlBuilder)
     {
-        if($request->ajax()){
+        /*if($request->ajax()){
             $user = Auth::user()->name;
             $datapeserta = Peserta::with('jeniskelas')->where('posted_by', $user);
             // return Datatables::of($datapeserta)->make(true);
@@ -43,18 +43,17 @@ class DatainputbyuserController extends Controller
         $html = $htmlBuilder->addColumn(['data'=>'nis', 'name'=>'nis', 'title'=>'NIS'])
         ->addColumn(['data'=>'nama', 'name'=>'nama', 'title'=>'Nama'])
         ->addColumn(['data'=>'nohp', 'name'=>'nohp', 'title'=>'No. HP'])
-        /*->addColumn(['data'=>'email', 'name'=>'email', 'title'=>'Email'])*/
         ->addColumn(['data'=>'jeniskelas.name', 'name'=>'jeniskelas.name', 'title'=>'Jenis Kelas'])
         ->addColumn(['data'=>'latarbelakang', 'name'=>'latarbelakang', 'title'=>'Latar Belakang'])
         ->addColumn(['data'=>'tanggalpelaksanaan', 'name'=>'tanggalpelaksanaan', 'title'=>'Tanggal Pelaksanaan'])
         ->addColumn(['data'=>'judulprogram', 'name'=>'judulprogram', 'title'=>'Judul'])
-        /*->addColumn(['data'=>'lokasipelaksanaan', 'name'=>'lokasipelaksanaan', 'title'=>'Lokasi Pelaksanaan'])*/
-        /*->addColumn(['data'=>'akuninstagram', 'name'=>'akuninstagram', 'title'=>'Instagram'])*/
         ->addColumn(['data'=>'materi', 'name'=>'materi', 'title'=>'Materi'])
         ->addColumn(['data'=>'posted_by', 'name'=>'posted_by', 'title'=>'Input'])
-        ->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);
+        ->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);*/
+        $user = Auth::user()->name;
+        $datapeserta = Peserta::with('jeniskelas')->where('posted_by', $user)->paginate(10);
 
-        return view('datainputbyuser.index')->with(compact('html'));
+        return view('datainputbyuser.index')->with(compact('datapeserta'));
     }
 
     /**
@@ -87,19 +86,19 @@ class DatainputbyuserController extends Controller
         $getnis = $request->get('jeniskelas_id');
 
         if($getnis == 1){
-            $prefix = "RCL-";
+            $prefix = "RCL.";
         }elseif ($getnis == 2){
-            $prefix = "IHT-";
+            $prefix = "IHT.";
         }elseif ($getnis == 3){
-            $prefix = "PRC-";
+            $prefix = "PRC.";
         }elseif ($getnis == 4){
-            $prefix = "SMN-";
+            $prefix = "SMN.";
         }elseif ($getnis == 5){
-            $prefix = "PBC-";
+            $prefix = "PBC.";
         }elseif ($getnis == 6){
-            $prefix = "OPC-";
+            $prefix = "OPC.";
         }else{
-            $prefix = "NUL-";
+            $prefix = "NUL.";
         }
 
         $nis = AutoNumber::autonumber($table,$primary,$prefix);
@@ -226,19 +225,19 @@ class DatainputbyuserController extends Controller
         $getnis = $request->get('jeniskelas_id');
 
         if($getnis == 1){
-            $prefix = "RCL-";
+            $prefix = "RCL.";
         }elseif ($getnis == 2){
-            $prefix = "IHT-";
+            $prefix = "IHT.";
         }elseif ($getnis == 3){
-            $prefix = "PRC-";
+            $prefix = "PRC.";
         }elseif ($getnis == 4){
-            $prefix = "SMN-";
+            $prefix = "SMN.";
         }elseif ($getnis == 5){
-            $prefix = "PBC-";
+            $prefix = "PBC.";
         }elseif ($getnis == 6){
-            $prefix = "OPC-";
+            $prefix = "OPC.";
         }else{
-            $prefix = "NUL-";
+            $prefix = "NUL.";
         }
 
         $data['nis'] = $prefix.$substrnonis;
@@ -465,5 +464,279 @@ class DatainputbyuserController extends Controller
             }
         });
         })->export('xls');
+    }
+
+    public function filterdata(Request $request)
+    {
+        $user = Auth::user()->name;
+        $tahunini = date('Y');
+        $a = $request->get('jk');
+        $b = $request->get('jeniskelas_id');
+        $c = $request->get('lb');
+        $d = $request->get('materi');
+        $e = $request->get('jenisindustri');
+        $f = $request->get('lj');
+        $g = $request->get('bp');
+        $h = $request->get('tp');
+
+        // variabel jenis kelamin //
+        if($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c != NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a != NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('latarbelakang','=',$c)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c != NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a != NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a != NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelamin','=',$a)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel jenis kelamin //
+
+        // variabel jenis Jenis Kelas //
+        if($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c != NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b != NULL && $c == NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b != NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jeniskelas_id','=',$b)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel jenis Jenis Kelas //
+
+        // variabel latar belakang //
+        if($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c != NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('latarbelakang','=',$c)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel latar belakang //
+
+        // variabel materi //
+        if($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f != NULL && $g == NULL && $h == NULL){
+             $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f == NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f == NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c == NULL && $d != NULL && $e == NULL && $f == NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('materi','=',$d)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel materi //
+
+        // variabel jenis industri //
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f == NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f == NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e != NULL && $f == NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('jenisindustri','=',$e)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel jenis industri //
+
+        // variabel level jabatan //
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('leveljabatan','=',$f)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('leveljabatan','=',$f)->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f != NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->where('leveljabatan','=',$f)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel level jabatan //
+
+        // variabel bulan pelaksanaan //
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->whereYear('tanggalpelaksanaan','=',$tahunini)->whereMonth('tanggalpelaksanaan','=',$g)->where('posted_by', $user)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g != NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->whereMonth('tanggalpelaksanaan','=',$g)->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel bulan pelaksanaan //
+
+        // variabel tahun pelaksanaan //
+        if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h != NULL){
+            $datapeserta = Peserta::with('jeniskelas')->whereYear('tanggalpelaksanaan','=',$h)->where('posted_by', $user)->paginate(10);
+        }
+        // end variabel tahun pelaksanaan //
+
+        return view('datainputbyuser.index')->with(compact('datapeserta'));
     }
 }

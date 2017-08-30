@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Role;
 use App\User;
-use Yajra\Datatables\Html\Builder;
-use Yajra\Datatables\Facades\Datatables;
+use yajra\Datatables\Html\Builder;
+use yajra\Datatables\Facades\Datatables;
 
 use App\Http\Requests\StoreMemberRequest;
 use App\Http\Requests\UpdateMemberRequest;
@@ -22,7 +22,7 @@ class MembersController extends Controller
      */
     public function index(Request $request, Builder $htmlBuilder)
     {
-        if ($request->ajax()) {
+       /* if ($request->ajax()) {
             $members = Role::where('name', 'user')->first()->users;
             return Datatables::of($members)->addColumn('action', function($member){
             
@@ -38,9 +38,11 @@ class MembersController extends Controller
         ->addColumn(['data' => 'email', 'name'=>'email', 'title'=>'Email'])
         ->addColumn(['data' => 'username', 'name'=>'username', 'title'=>'Username'])
         ->addColumn(['data' => 'passview', 'name'=>'passview', 'title'=>'Password'])
-        ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);
+        ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);*/
+
+        $members = Role::where('name', 'user')->first()->users;
         
-        return view('members.index', compact('html'));
+        return view('members.index', compact('members'));
 
     }
 

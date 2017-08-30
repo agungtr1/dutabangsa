@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Materi;
-use Yajra\Datatables\Html\Builder;
-use Yajra\Datatables\DataTables;
+use yajra\Datatables\Html\Builder;
+use yajra\Datatables\DataTables;
 use Session;
 
 class MateriController extends Controller
@@ -17,7 +17,7 @@ class MateriController extends Controller
      */
     public function index(Request $request, Builder $htmlBuilder)
     {
-        if($request->ajax()){
+        /*if($request->ajax()){
             $materi = Materi::select(['id', 'name']);
             // return Datatables::of($materi)->make(true);
             return Datatables::of($materi)->addColumn('action', function($materi){
@@ -31,9 +31,11 @@ class MateriController extends Controller
         }
 
         // $html = $htmlBuilder->addColumn(['data'=>'name', 'name'=>'name', 'title'=>'Nama']);
-        $html = $htmlBuilder->addColumn(['data'=>'name', 'name'=>'name', 'title'=>'Nama'])->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);
+        $html = $htmlBuilder->addColumn(['data'=>'name', 'name'=>'name', 'title'=>'Nama'])->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false, 'searchable'=>false]);*/
 
-        return view('materi.index')->with(compact('html'));
+        $materi = Materi::select(['id', 'name'])->paginate(10);
+
+        return view('materi.index')->with(compact('materi'));
     }
 
     /**

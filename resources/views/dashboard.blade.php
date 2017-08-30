@@ -53,12 +53,12 @@
                         <div class="col-md-6">
                             <h4>Statistik Jenis Kelamin</h4>
                             <div id="chart-div"></div>
-                            @donutchart('jeniskelamin', 'chart-div')
+                            @barchart('jeniskelamin', 'chart-div')
                         </div>
                         <div class="col-md-6">
                             <h4>Statistik Latar Belakang</h4>
                             <div id="chart-div2"></div>
-                            @piechart('latarbelakang', 'chart-div2') 
+                            @barchart('latarbelakang', 'chart-div2') 
                         </div>                    
                     </div>
 
@@ -76,12 +76,12 @@
                         <div class="col-md-6">
                             <hr><h4>Statistik Level Jabatan</h4>
                             <div id="chart-div3"></div>
-                            @piechart('jabatan', 'chart-div3') 
+                            @barchart('jabatan', 'chart-div3') 
                         </div>
                         <div class="col-md-6">
                             <hr><h4>Statistik Industri Pekerjaan</h4>
                             <div id="chart-div4"></div>
-                            @donutchart('jenisindustri', 'chart-div4') 
+                            @barchart('jenisindustri', 'chart-div4') 
                         </div>                    
                     </div>
 
@@ -89,12 +89,12 @@
                         <div class="col-md-6">
                             <hr><h4>Statistik Universitas</h4>
                             <div id="chart-div5"></div>
-                            @donutchart('universitas', 'chart-div5') 
+                            @barchart('universitas', 'chart-div5') 
                         </div>
                         <div class="col-md-6">
                             <hr><h4>Statistik Jurusan</h4>
                             <div id="chart-div6"></div>
-                            @piechart('jurusan', 'chart-div6')
+                            @columnchart('jurusan', 'chart-div6')
                         </div>                    
                     </div>
 
@@ -102,7 +102,7 @@
                         <div class="col-md-6">
                             <hr><h4>Statistik Usia</h4>
                             <div id="chart-div7"></div>
-                            @donutchart('usia', 'chart-div7') 
+                            @columnchart('usia', 'chart-div7') 
                         </div>
                         <div class="col-md-6">
                             <hr><h4>Statistik Mengetahui Duta Bangsa</h4>

@@ -13,7 +13,29 @@
 				</div>
 				<div class="panel-body">
 					<p> <a class="btn btn-primary" href="{{ route('materi.create') }}">Tambah</a> </p>
-					{!! $html->table(['class'=>'table-striped']) !!}
+					<div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($materi as $m)
+                                <tr>
+                                    <td><b>{{ $m->name }}</b></td>
+                                    <td>
+                                        <a href="{{ route('materi.edit',$m->id) }}" class="btn btn-xs btn-info"><i class="fa fa-btn fa-pencil"></i></a>
+                                        <a href="{{ route('materi.destroy',$m->id) }}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fa fa-btn fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        {{ $materi->links() }}
+                    </div>
+					{{-- {!! $html->table(['class'=>'table-striped']) !!} --}}
 				</div>
 			</div>
 		</div>
@@ -22,5 +44,5 @@
 @endsection
 
 @section('scripts')
-	{!! $html->scripts() !!}
+	{{-- {!! $html->scripts() !!} --}}
 @endsection
