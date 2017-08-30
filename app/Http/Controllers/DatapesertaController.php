@@ -738,6 +738,8 @@ class DatapesertaController extends Controller
         // variabel tahun pelaksanaan //
         if($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h != NULL){
             $datapeserta = Peserta::with('jeniskelas')->whereYear('tanggalpelaksanaan','=',$h)->paginate(10);
+        }elseif($a == NULL && $b == NULL && $c == NULL && $d == NULL && $e == NULL && $f == NULL && $g == NULL && $h == NULL){
+            $datapeserta = Peserta::with('jeniskelas')->paginate(10);
         }
         // end variabel tahun pelaksanaan //
 
