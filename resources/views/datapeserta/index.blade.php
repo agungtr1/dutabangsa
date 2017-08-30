@@ -78,6 +78,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @if(count($datapeserta))
                             @foreach($datapeserta as $dp)
                                 <tr>
                                     <td><b>{{ $dp->nis }}</b></td>
@@ -97,6 +98,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                                <tr style="text-align: center;">
+                                    <td style="background:white !important;">&nbsp;</td>
+                                    <td class="alert alert-warning" colspan="8">Oops.. Data Tidak Ditemukan</td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                         {{ $datapeserta->links() }}
