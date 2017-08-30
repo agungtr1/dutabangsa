@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Role;
 use App\User;
-use yajra\Datatables\Html\Builder;
-use yajra\Datatables\Facades\Datatables;
+use Yajra\Datatables\Html\Builder;
+use Yajra\Datatables\Facades\Datatables;
 
 use App\Http\Requests\StoreMemberRequest;
 use App\Http\Requests\UpdateMemberRequest;

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Materi;
-use yajra\Datatables\Html\Builder;
-use yajra\Datatables\DataTables;
+use Yajra\Datatables\Html\Builder;
+use Yajra\Datatables\DataTables;
 use Session;
 
 class MateriController extends Controller

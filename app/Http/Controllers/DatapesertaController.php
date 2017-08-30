@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use yajra\Datatables\Html\Builder;
-use yajra\Datatables\DataTables;
+use Yajra\Datatables\Html\Builder;
+use Yajra\Datatables\DataTables;
 use App\Peserta;
 use App\Materi;
 use App\Jeniskelas;
