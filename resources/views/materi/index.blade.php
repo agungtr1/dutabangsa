@@ -27,7 +27,9 @@
                                     <td><b>{{ $m->name }}</b></td>
                                     <td>
                                         <a href="{{ route('materi.edit',$m->id) }}" class="btn btn-xs btn-info"><i class="fa fa-btn fa-pencil"></i></a>
-                                        <a href="{{ route('materi.destroy',$m->id) }}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fa fa-btn fa-trash"></i></a>
+                                        {!! Form::open(['url'=>route('materi.destroy',$m->id),'method'=>'delete','class'=>'form-inline js-confirm','data-confirm'=>'Are you sure you want to delete this item?','_token'=>csrf_token()]) !!}
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-btn fa-trash"></i></button>
+                                        {!! Form::close() !!}
                                     </td>
                                 </tr>
                             @endforeach

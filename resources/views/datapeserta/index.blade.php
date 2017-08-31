@@ -94,7 +94,9 @@
                                         <a href="{{ route('datapeserta.show',$dp->id) }}" class="btn btn-xs btn-success"><i class="fa fa-btn fa-eye"></i></a>
                                         <a href="{{ route('print.datapeserta',$dp->id) }}" class="btn btn-xs btn-default" target="_blank"><i class="fa fa-btn fa-print"></i></a>
                                         <a href="{{ route('datapeserta.edit',$dp->id) }}" class="btn btn-xs btn-info"><i class="fa fa-btn fa-pencil"></i></a>
-                                        <a href="{{ route('datapeserta.destroy',$dp->id) }}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fa fa-btn fa-trash"></i></a>
+                                        {!! Form::open(['url'=>route('datapeserta.destroy',$dp->id),'method'=>'delete','class'=>'form-inline js-confirm','data-confirm'=>'Are you sure you want to delete this item?','_token'=>csrf_token()]) !!}
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-btn fa-trash"></i></button>
+                                        {!! Form::close() !!}
                                     </td>
                                 </tr>
                             @endforeach
