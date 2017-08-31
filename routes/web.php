@@ -72,7 +72,7 @@ Route::group(['prefix'=>'nonadmin', 'middleware'=>['auth','role:user']], functio
 		'as' => 'export.listdatapesertaall.post',
 		'uses' => 'DatainputbyuserController@exportAll'
 	]);
-	Route::post('alldatapeserta/filter', [
+	Route::post('listdatapeserta/filter', [
 		'as' => 'listdatapeserta.filter',
 		'uses' => 'DatainputbyuserController@filterdata'
 	]);
