@@ -84,21 +84,23 @@ class DatainputbyuserController extends Controller
         $table = "pesertas";
         $primary = "nis";
         $getnis = $request->get('jeniskelas_id');
+        $gettanggalpelaksanaan = $request->get('tanggalpelaksanaan');
+        $formattanggal = date('dmy',strtotime($gettanggalpelaksanaan));
 
         if($getnis == 1){
-            $prefix = "RCL.";
+            $prefix = "RCL.".$formattanggal;
         }elseif ($getnis == 2){
-            $prefix = "IHT.";
+            $prefix = "IHT.".$formattanggal;
         }elseif ($getnis == 3){
-            $prefix = "PRC.";
+            $prefix = "PRC.".$formattanggal;
         }elseif ($getnis == 4){
-            $prefix = "SMN.";
+            $prefix = "SMN.".$formattanggal;
         }elseif ($getnis == 5){
-            $prefix = "PBC.";
+            $prefix = "PBC.".$formattanggal;
         }elseif ($getnis == 6){
-            $prefix = "OPC.";
+            $prefix = "OPC.".$formattanggal;
         }else{
-            $prefix = "NUL.";
+            $prefix = "NUL.".$formattanggal;
         }
 
         $nis = AutoNumber::autonumber($table,$primary,$prefix);
@@ -223,21 +225,23 @@ class DatainputbyuserController extends Controller
         $substrnonis = substr($nisdb,4);
 
         $getnis = $request->get('jeniskelas_id');
+        $gettanggalpelaksanaan = $request->get('tanggalpelaksanaan');
+        $formattanggal = date('dmy',strtotime($gettanggalpelaksanaan));
 
         if($getnis == 1){
-            $prefix = "RCL.";
+            $prefix = "RCL.".$formattanggal;
         }elseif ($getnis == 2){
-            $prefix = "IHT.";
+            $prefix = "IHT.".$formattanggal;
         }elseif ($getnis == 3){
-            $prefix = "PRC.";
+            $prefix = "PRC.".$formattanggal;
         }elseif ($getnis == 4){
-            $prefix = "SMN.";
+            $prefix = "SMN.".$formattanggal;
         }elseif ($getnis == 5){
-            $prefix = "PBC.";
+            $prefix = "PBC.".$formattanggal;
         }elseif ($getnis == 6){
-            $prefix = "OPC.";
+            $prefix = "OPC.".$formattanggal;
         }else{
-            $prefix = "NUL.";
+            $prefix = "NUL.".$formattanggal;
         }
 
         $data['nis'] = $prefix.$substrnonis;

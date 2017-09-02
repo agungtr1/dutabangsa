@@ -31,7 +31,7 @@ class AutoNumber
         $getyear = date('Y');
         $gettoday = date('d');
         $getmonth1 = date('dm');
-        $prx = $prefix.$date;
+        $prx = $prefix;
         if($getmonth1 == '0101')
         {
             $kd = $prx."00001";
