@@ -37,6 +37,10 @@ class HomeController extends Controller
             $getmonth = date('m');
             $getyear = date('Y');
             $gettoday = date('d');
+            $semesterawaldari = $getyear."-01";
+            $semesterawalsampai = $getyear."-06";
+            $semesterakhirdari = $getyear."-06";
+            $semesterakhirsampai = $getyear."-12";
 
             //Jenis Kelamin
             $reasons =\Lava::DataTable();
@@ -61,11 +65,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $datajeniskelamin = Peserta::groupBy('jeniskelamin')->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
             }elseif($getfilter == 'bulanan'){
-                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
+                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
             }elseif($getfilter == 'tahunan'){
-                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereYear('created_at','=',$getyear)->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
+                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereYear('tanggalpelaksanaan','=',$getyear)->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
             }elseif($getfilter == 'tanggal'){
-                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereBetween('created_at',array($getdari,$getsampai))->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
+                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('jeniskelamin')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
             }else{
                 $datajeniskelamin = Peserta::groupBy('jeniskelamin')->select('jeniskelamin', DB::raw('count(*) as j_k'))->get();
             }
@@ -87,11 +95,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $dataLB = Peserta::groupBy('latarbelakang')->select('latarbelakang', DB::raw('count(*) as lb'))->get();
             }elseif($getfilter == 'bulanan'){
-                $dataLB = Peserta::groupBy('latarbelakang')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('latarbelakang', DB::raw('count(*) as lb'))->get();
+                $dataLB = Peserta::groupBy('latarbelakang')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('latarbelakang', DB::raw('count(*) as lb'))->get();
             }elseif($getfilter == 'tahunan'){
-                $dataLB = Peserta::groupBy('latarbelakang')->whereYear('created_at','=',$getyear)->select('latarbelakang', DB::raw('count(*) as lb'))->get();
+                $dataLB = Peserta::groupBy('latarbelakang')->whereYear('tanggalpelaksanaan','=',$getyear)->select('latarbelakang', DB::raw('count(*) as lb'))->get();
             }elseif($getfilter == 'tanggal'){
-                $dataLB = Peserta::groupBy('latarbelakang')->whereBetween('created_at',array($getdari,$getsampai))->select('latarbelakang', DB::raw('count(*) as lb'))->get();
+                $dataLB = Peserta::groupBy('latarbelakang')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('latarbelakang', DB::raw('count(*) as lb'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('latarbelakang')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('latarbelakang', DB::raw('count(*) as lb'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('latarbelakang')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('latarbelakang', DB::raw('count(*) as lb'))->get();
             }else{
                 $dataLB = Peserta::groupBy('latarbelakang')->select('latarbelakang', DB::raw('count(*) as lb'))->get();
             }
@@ -122,11 +134,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $dataJAB = Peserta::groupBy('leveljabatan')->select('leveljabatan', DB::raw('count(*) as jab'))->get();
             }elseif($getfilter == 'bulanan'){
-                $dataJAB = Peserta::groupBy('leveljabatan')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('leveljabatan', DB::raw('count(*) as jab'))->get();
+                $dataJAB = Peserta::groupBy('leveljabatan')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('leveljabatan', DB::raw('count(*) as jab'))->get();
             }elseif($getfilter == 'tahunan'){
-                $dataJAB = Peserta::groupBy('leveljabatan')->whereYear('created_at','=',$getyear)->select('leveljabatan', DB::raw('count(*) as jab'))->get();
+                $dataJAB = Peserta::groupBy('leveljabatan')->whereYear('tanggalpelaksanaan','=',$getyear)->select('leveljabatan', DB::raw('count(*) as jab'))->get();
             }elseif($getfilter == 'tanggal'){
-                $dataJAB = Peserta::groupBy('leveljabatan')->whereBetween('created_at',array($getdari,$getsampai))->select('leveljabatan', DB::raw('count(*) as jab'))->get();
+                $dataJAB = Peserta::groupBy('leveljabatan')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('leveljabatan', DB::raw('count(*) as jab'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('leveljabatan')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('leveljabatan', DB::raw('count(*) as jab'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('leveljabatan')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('leveljabatan', DB::raw('count(*) as jab'))->get();
             }else{
                 $dataJAB = Peserta::groupBy('leveljabatan')->select('leveljabatan', DB::raw('count(*) as jab'))->get();
             }
@@ -155,11 +171,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $datausia = Peserta::groupBy('usia')->select('usia', DB::raw('count(*) as us'))->get();
             }elseif($getfilter == 'bulanan'){
-                $datausia = Peserta::groupBy('usia')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('usia', DB::raw('count(*) as us'))->get();
+                $datausia = Peserta::groupBy('usia')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('usia', DB::raw('count(*) as us'))->get();
             }elseif($getfilter == 'tahunan'){
-                $datausia = Peserta::groupBy('usia')->whereYear('created_at','=',$getyear)->select('usia', DB::raw('count(*) as us'))->get();
+                $datausia = Peserta::groupBy('usia')->whereYear('tanggalpelaksanaan','=',$getyear)->select('usia', DB::raw('count(*) as us'))->get();
             }elseif($getfilter == 'tanggal'){
-                $datausia = Peserta::groupBy('usia')->whereBetween('created_at',array($getdari,$getsampai))->select('usia', DB::raw('count(*) as us'))->get();
+                $datausia = Peserta::groupBy('usia')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('usia', DB::raw('count(*) as us'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('usia')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('usia', DB::raw('count(*) as us'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('usia')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('usia', DB::raw('count(*) as us'))->get();
             }else{
                 $datausia = Peserta::groupBy('usia')->select('usia', DB::raw('count(*) as us'))->get();
             }
@@ -190,11 +210,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $dataji = Peserta::groupBy('jenisindustri')->select('jenisindustri', DB::raw('count(*) as ji'))->get();
             }elseif($getfilter == 'bulanan'){
-                $dataji = Peserta::groupBy('jenisindustri')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('jenisindustri', DB::raw('count(*) as ji'))->get();
+                $dataji = Peserta::groupBy('jenisindustri')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('jenisindustri', DB::raw('count(*) as ji'))->get();
             }elseif($getfilter == 'tahunan'){
-                $dataji = Peserta::groupBy('jenisindustri')->whereYear('created_at','=',$getyear)->select('jenisindustri', DB::raw('count(*) as ji'))->get();
+                $dataji = Peserta::groupBy('jenisindustri')->whereYear('tanggalpelaksanaan','=',$getyear)->select('jenisindustri', DB::raw('count(*) as ji'))->get();
             }elseif($getfilter == 'tanggal'){
-                $dataji = Peserta::groupBy('jenisindustri')->whereBetween('created_at',array($getdari,$getsampai))->select('jenisindustri', DB::raw('count(*) as ji'))->get();
+                $dataji = Peserta::groupBy('jenisindustri')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('jenisindustri', DB::raw('count(*) as ji'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('jenisindustri')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('jenisindustri', DB::raw('count(*) as ji'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('jenisindustri')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('jenisindustri', DB::raw('count(*) as ji'))->get();
             }else{
                 $dataji = Peserta::groupBy('jenisindustri')->select('jenisindustri', DB::raw('count(*) as ji'))->get();
             }
@@ -219,11 +243,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $datauniv = Peserta::groupBy('universitas')->select('universitas', DB::raw('count(*) as univ'))->get();
             }elseif($getfilter == 'bulanan'){
-                $datauniv = Peserta::groupBy('universitas')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('universitas', DB::raw('count(*) as univ'))->get();
+                $datauniv = Peserta::groupBy('universitas')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('universitas', DB::raw('count(*) as univ'))->get();
             }elseif($getfilter == 'tahunan'){
-                $datauniv = Peserta::groupBy('universitas')->whereYear('created_at','=',$getyear)->select('universitas', DB::raw('count(*) as univ'))->get();
+                $datauniv = Peserta::groupBy('universitas')->whereYear('tanggalpelaksanaan','=',$getyear)->select('universitas', DB::raw('count(*) as univ'))->get();
             }elseif($getfilter == 'tanggal'){
-                $datauniv = Peserta::groupBy('universitas')->whereBetween('created_at',array($getdari,$getsampai))->select('universitas', DB::raw('count(*) as univ'))->get();
+                $datauniv = Peserta::groupBy('universitas')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('universitas', DB::raw('count(*) as univ'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('universitas')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('universitas', DB::raw('count(*) as univ'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('universitas')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('universitas', DB::raw('count(*) as univ'))->get();
             }else{
                 $datauniv = Peserta::groupBy('universitas')->select('universitas', DB::raw('count(*) as univ'))->get();
             }
@@ -249,11 +277,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $datajurusan = Peserta::groupBy('jurusan')->select('jurusan', DB::raw('count(*) as jur'))->get();
             }elseif($getfilter == 'bulanan'){
-                $datajurusan = Peserta::groupBy('jurusan')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('jurusan', DB::raw('count(*) as jur'))->get();
+                $datajurusan = Peserta::groupBy('jurusan')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('jurusan', DB::raw('count(*) as jur'))->get();
             }elseif($getfilter == 'tahunan'){
-                $datajurusan = Peserta::groupBy('jurusan')->whereYear('created_at','=',$getyear)->select('jurusan', DB::raw('count(*) as jur'))->get();
+                $datajurusan = Peserta::groupBy('jurusan')->whereYear('tanggalpelaksanaan','=',$getyear)->select('jurusan', DB::raw('count(*) as jur'))->get();
             }elseif($getfilter == 'tanggal'){
-                $datajurusan = Peserta::groupBy('jurusan')->whereBetween('created_at',array($getdari,$getsampai))->select('jurusan', DB::raw('count(*) as jur'))->get();
+                $datajurusan = Peserta::groupBy('jurusan')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('jurusan', DB::raw('count(*) as jur'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('jurusan')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('jurusan', DB::raw('count(*) as jur'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('jurusan')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('jurusan', DB::raw('count(*) as jur'))->get();
             }else{
                 $datajurusan = Peserta::groupBy('jurusan')->select('jurusan', DB::raw('count(*) as jur'))->get();
             }
@@ -289,11 +321,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $datamdb = Peserta::groupBy('mengetahuidb')->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
             }elseif($getfilter == 'bulanan'){
-                $datamdb = Peserta::groupBy('mengetahuidb')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
+                $datamdb = Peserta::groupBy('mengetahuidb')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
             }elseif($getfilter == 'tahunan'){
-                $datamdb = Peserta::groupBy('mengetahuidb')->whereYear('created_at','=',$getyear)->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
+                $datamdb = Peserta::groupBy('mengetahuidb')->whereYear('tanggalpelaksanaan','=',$getyear)->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
             }elseif($getfilter == 'tanggal'){
-                $datamdb = Peserta::groupBy('mengetahuidb')->whereBetween('created_at',array($getdari,$getsampai))->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
+                $datamdb = Peserta::groupBy('mengetahuidb')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::groupBy('mengetahuidb')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::groupBy('mengetahuidb')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
             }else{
                 $datamdb = Peserta::groupBy('mengetahuidb')->select('mengetahuidb', DB::raw('count(*) as mdb'))->get();
             }
@@ -315,11 +351,15 @@ class HomeController extends Controller
             if($getfilter == 'all'){
                 $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
             }elseif($getfilter == 'bulanan'){
-                $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereYear('created_at','=',$getyear)->whereMonth('created_at','=',$getmonth)->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
+                $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereYear('tanggalpelaksanaan','=',$getyear)->whereMonth('tanggalpelaksanaan','=',$getmonth)->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
             }elseif($getfilter == 'tahunan'){
-                $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereYear('created_at','=',$getyear)->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
+                $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereYear('tanggalpelaksanaan','=',$getyear)->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
             }elseif($getfilter == 'tanggal'){
-                $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereBetween('created_at',array($getdari,$getsampai))->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
+                $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereBetween('tanggalpelaksanaan',array($getdari,$getsampai))->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
+            }elseif($getfilter == 'semesterawal'){
+                $datajeniskelamin = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereBetween('tanggalpelaksanaan',array($semesterawaldari,$semesterawalsampai))->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
+            }elseif($getfilter == 'semesterakhir'){
+                $datajeniskelamin = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->whereBetween('tanggalpelaksanaan',array($semesterakhirdari,$semesterakhirsampai))->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
             }else{
                 $datajeniskelas = Peserta::with('jeniskelas')->groupBy('jeniskelas_id')->select('jeniskelas_id', DB::raw('count(*) as jenis'))->get();
             }
@@ -340,7 +380,7 @@ class HomeController extends Controller
 
             return view('dashboard')->with(compact('getyear'));
         }
-        return view('home');
+            
 
     }
 
@@ -390,7 +430,7 @@ class HomeController extends Controller
         }elseif($getfilter == 'tanggal'){
             $dataLB = Peserta::groupBy('latarbelakang')->select('latarbelakang', DB::raw('count(*) as lb'))->get();
         }elseif($getfilter == 'harian'){
-            $dataLB = Peserta::groupBy('latarbelakang')->select('latarbelakang', DB::raw('count(*) as lb'))->where('created_at','=',$gettoday)->get();
+            $dataLB = Peserta::groupBy('latarbelakang')->select('latarbelakang', DB::raw('count(*) as lb'))->where('tanggalpelaksanaan','=',$gettoday)->get();
         }elseif($getfilter == 'all'){
             $dataLB = Peserta::groupBy('latarbelakang')->select('latarbelakang', DB::raw('count(*) as lb'))->get();
         }

@@ -15,7 +15,7 @@
                             <div class="form-group{{ $errors->has('filter') ? ' has-error' : '' }}">
                                 {!! Form::label('filter', 'FIlter:', ['class'=>'col-md-1 control-label']) !!}
                                 <div class="col-md-3">
-                                {!! Form::select('filter', ['all'=>'Semua Waktu','bulanan'=>'Per Bulan Ini','tahunan'=>'Per Tahun Ini','tanggal'=>'Berdasarkan Tanggal'], 'all', ['id'=>'filter','class'=>'form-control','placeholder' => 'Pilih Waktu','onChange'=>'submitForm(this)']) !!}
+                                {!! Form::select('filter', ['all'=>'Semua Waktu','bulanan'=>'Per Bulan Ini','tahunan'=>'Per Tahun Ini','semesterawal'=>'Semester Awal','semesterakhir'=>'Semester Akhir'], 'all', ['id'=>'filter','class'=>'form-control','placeholder' => 'Pilih Waktu','onChange'=>'submitForm(this)']) !!}
                                 {!! $errors->first('filter', '<p class="help-block">:message</p>') !!}
                                 </div>
                                 <div class="col-md-7">
@@ -139,7 +139,7 @@
     </script>
      <script>
      function submitForm(elem) {
-          if (elem.value == 'all' || elem.value == 'tahunan' || elem.value == 'bulanan') {
+          if (elem.value == 'all' || elem.value == 'tahunan' || elem.value == 'bulanan' || elem.value == 'semesterawal' || elem.value == 'semesterakhir') {
               elem.form.submit();
           }else if (elem.value == 'tanggal') {
             console.log('dapet nih');

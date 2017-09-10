@@ -15,6 +15,7 @@ use Excel;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\AutoNumber;
 use DateTime;
+use DB;
 
 class DatapesertaController extends Controller
 {
@@ -119,8 +120,14 @@ class DatapesertaController extends Controller
         ]);
         $data = $request->all();
 
-        $table = "pesertas";
-        $primary = "nis";
+
+
+        // $table = "pesertas";
+        // $primary = "nis";
+        $q = DB::table('pesertas')->select(DB::raw('MAX(RIGHT(nis,4)) as kd_max'));
+        date_default_timezone_set('Asia/Jakarta');
+        $date = date('dmy');
+
         $getnis = $request->get('jeniskelas_id');
         $gettanggalpelaksanaan = $request->get('tanggalpelaksanaan');
         $formattanggal = date('dmy',strtotime($gettanggalpelaksanaan));
@@ -141,7 +148,32 @@ class DatapesertaController extends Controller
             $prefix = "NUL.".$formattanggal;
         }
 
-        $nis = AutoNumber::autonumber($table,$primary,$prefix);
+        if($formattanggal == '0101')
+        {
+            $data['nis'] = $prefix."00001";
+        }
+        elseif($formattanggal == '0101' AND $q->count()>1)
+        {
+            foreach($q->get() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $data['nis'] = $prefix.sprintf("%05s", $tmp);
+            }
+        }
+        elseif($q->count()>0)
+        {
+            foreach($q->get() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $data['nis'] = $prefix.sprintf("%05s", $tmp);
+            }
+        }
+        else
+        {
+            $data['nis'] = $prefix."00001";
+        }
+        // $nis = AutoNumber::autonumber($table,$primary,$prefix);
+        // $data['nis'] = $nis;
 
         $didaftarkanoleh = $request->get('didaftarkanoleh');
         $mengetahuidb = $request->get('mengetahuidb');
@@ -164,7 +196,6 @@ class DatapesertaController extends Controller
             $data['leveljabatan'] = $leveljabatan;
         }
 
-        $data['nis'] = $nis;
 
         // Tanggal Lahir
         $birthday = $request->get('tanggallahir');

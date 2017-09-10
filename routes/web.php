@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', 'FirstController@index');
+Route::post('/', 'FirstController@index');
 
 Auth::routes();
 
