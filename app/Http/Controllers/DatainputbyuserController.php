@@ -8,6 +8,7 @@ use Yajra\Datatables\DataTables;
 use App\Peserta;
 use App\Materi;
 use App\Jeniskelas;
+use App\Niptemp;
 use Session;
 use App\Http\Requests\StorePesertaRequest;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ use PDF;
 use Excel;
 use App\Helpers\AutoNumber;
 use DateTime;
+use DB;
 
 class DatainputbyuserController extends Controller
 {
@@ -81,11 +83,19 @@ class DatainputbyuserController extends Controller
         ]);
         $data = $request->all();
 
-        $table = "pesertas";
-        $primary = "nis";
+        // $table = "pesertas";
+        // $primary = "nis";
+        $q = DB::table('pesertas')->select(DB::raw('MAX(RIGHT(nis,5)) as kd_max'));
+        $max = Peserta::max('tanggalpelaksanaan');
+        $maxtahun = substr($max,0,4);
+        date_default_timezone_set('Asia/Jakarta');
+        $date = date('dmy');
+
         $getnis = $request->get('jeniskelas_id');
         $gettanggalpelaksanaan = $request->get('tanggalpelaksanaan');
         $formattanggal = date('dmy',strtotime($gettanggalpelaksanaan));
+        $thnpelaksanaan = date('Y',strtotime($gettanggalpelaksanaan));
+        $niptemp = Niptemp::where('year',$thnpelaksanaan)->first(); 
 
         if($getnis == 1){
             $prefix = "RCL.".$formattanggal;
@@ -103,7 +113,18 @@ class DatainputbyuserController extends Controller
             $prefix = "NUL.".$formattanggal;
         }
 
-        $nis = AutoNumber::autonumber($table,$primary,$prefix);
+        if($niptemp){
+
+            $tambahcount = ($niptemp->count)+1;
+            Niptemp::where('year',$thnpelaksanaan)->update(['count'=>$tambahcount]);
+            $selectcount = Niptemp::select('count')->where('year',$thnpelaksanaan)->first();
+            $data['nis'] = $prefix.sprintf("%05s", $selectcount->count);
+        }else{
+            Niptemp::insert(['year'=>$thnpelaksanaan,'count'=>1]);
+            $data['nis'] = $prefix.sprintf("%05s", 1);
+        }
+        
+        // $nis = AutoNumber::autonumber($table,$primary,$prefix);
 
         $didaftarkanoleh = $request->get('didaftarkanoleh');
         $mengetahuidb = $request->get('mengetahuidb');

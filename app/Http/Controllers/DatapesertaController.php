@@ -8,6 +8,7 @@ use Yajra\Datatables\DataTables;
 use App\Peserta;
 use App\Materi;
 use App\Jeniskelas;
+use App\Niptemp;
 use Session;
 use App\Http\Requests\StorePesertaRequest;
 use PDF;
@@ -124,13 +125,17 @@ class DatapesertaController extends Controller
 
         // $table = "pesertas";
         // $primary = "nis";
-        $q = DB::table('pesertas')->select(DB::raw('MAX(RIGHT(nis,4)) as kd_max'));
+        $q = DB::table('pesertas')->select(DB::raw('MAX(RIGHT(nis,5)) as kd_max'));
+        $max = Peserta::max('tanggalpelaksanaan');
+        $maxtahun = substr($max,0,4);
         date_default_timezone_set('Asia/Jakarta');
         $date = date('dmy');
 
         $getnis = $request->get('jeniskelas_id');
         $gettanggalpelaksanaan = $request->get('tanggalpelaksanaan');
         $formattanggal = date('dmy',strtotime($gettanggalpelaksanaan));
+        $thnpelaksanaan = date('Y',strtotime($gettanggalpelaksanaan));
+        $niptemp = Niptemp::where('year',$thnpelaksanaan)->first(); 
 
         if($getnis == 1){
             $prefix = "RCL.".$formattanggal;
@@ -148,11 +153,22 @@ class DatapesertaController extends Controller
             $prefix = "NUL.".$formattanggal;
         }
 
-        if($formattanggal == '0101')
+        if($niptemp){
+
+            $tambahcount = ($niptemp->count)+1;
+            Niptemp::where('year',$thnpelaksanaan)->update(['count'=>$tambahcount]);
+            $selectcount = Niptemp::select('count')->where('year',$thnpelaksanaan)->first();
+            $data['nis'] = $prefix.sprintf("%05s", $selectcount->count);
+        }else{
+            Niptemp::insert(['year'=>$thnpelaksanaan,'count'=>1]);
+            $data['nis'] = $prefix.sprintf("%05s", 1);
+        }
+
+        /*if($thnpelaksanaan > $maxtahun AND $q->count()==0)
         {
             $data['nis'] = $prefix."00001";
         }
-        elseif($formattanggal == '0101' AND $q->count()>1)
+        elseif($thnpelaksanaan > $maxtahun AND $q->count()>0)
         {
             foreach($q->get() as $k)
             {
@@ -160,7 +176,7 @@ class DatapesertaController extends Controller
                 $data['nis'] = $prefix.sprintf("%05s", $tmp);
             }
         }
-        elseif($q->count()>0)
+        elseif($thnpelaksanaan == $maxtahun AND $q->count()>0)
         {
             foreach($q->get() as $k)
             {
@@ -168,10 +184,22 @@ class DatapesertaController extends Controller
                 $data['nis'] = $prefix.sprintf("%05s", $tmp);
             }
         }
-        else
+        elseif($thnpelaksanaan == $maxtahun AND $q->count()==0)
         {
             $data['nis'] = $prefix."00001";
         }
+        elseif($thnpelaksanaan < $maxtahun AND $q->count()>0)
+        {
+            foreach($q->get() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $data['nis'] = $prefix.sprintf("%05s", $tmp);
+            }
+        }
+        elseif($thnpelaksanaan < $maxtahun AND $q->count()==0)
+        {
+            $data['nis'] = $prefix."00001";
+        }*/
         // $nis = AutoNumber::autonumber($table,$primary,$prefix);
         // $data['nis'] = $nis;
 

@@ -358,6 +358,6 @@ class FirstController extends Controller
             ]
         ]);
 
-		return view('home');
+		return view('home')->with(compact('test'));
     }
 }
