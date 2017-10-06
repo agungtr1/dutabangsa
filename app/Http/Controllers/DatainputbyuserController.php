@@ -147,8 +147,6 @@ class DatainputbyuserController extends Controller
             $data['leveljabatan'] = $leveljabatan;
         }
 
-        $data['nis'] = $nis;
-
         // Tanggal Lahir
         $birthday = $request->get('tanggallahir');
 

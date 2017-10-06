@@ -13,7 +13,7 @@ class NiptempSeeder extends Seeder
     {
         //
         $posts = [
-        			['year'=>'2017','count'=>'00008']
+        			['year'=>'2017','count'=>'00008'],['year'=>'2018','count'=>'00001']
         	   	];
 
         // masukkan data ke database
