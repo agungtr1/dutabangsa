@@ -2,7 +2,7 @@
 {
     $(document).ready(function(){
         $('#jeniskelas_id').on('change', function() {
-            if ( this.value == '1' || this.value == '3')
+            if ( this.value == '1' || this.value == '2' || this.value == '3')
             {
                 $("#reguler").show();
             }
