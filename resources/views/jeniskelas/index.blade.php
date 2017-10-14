@@ -28,6 +28,13 @@
                                     <td>
                                         <a href="{{ route('jeniskelas.edit',$dp->id) }}" class="btn btn-xs btn-info"><i class="fa fa-btn fa-pencil"></i></a>
                                     </td>
+                                    <td>
+                                    	@if ($dp->id != 1  && $dp->id != 2 && $dp->id != 3 && $dp->id != 4 && $dp->id != 5 && $dp->id != 6)
+                                    	{!! Form::open(['url'=>route('jeniskelas.destroy',$dp->id),'method'=>'delete','class'=>'form-inline js-confirm','data-confirm'=>'Are you sure you want to delete this item?','_token'=>csrf_token()]) !!}
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-btn fa-trash"></i></button>
+                                        {!! Form::close() !!}
+										@endif
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>

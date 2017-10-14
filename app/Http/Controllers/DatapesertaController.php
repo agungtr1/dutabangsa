@@ -203,9 +203,18 @@ class DatapesertaController extends Controller
         // $nis = AutoNumber::autonumber($table,$primary,$prefix);
         // $data['nis'] = $nis;
 
+        $jenisprogram = $request->get('jenisprogram');
         $didaftarkanoleh = $request->get('didaftarkanoleh');
         $mengetahuidb = $request->get('mengetahuidb');
+        $jenisindustri = $request->get('jenisindustri');
         $leveljabatan = $request->get('leveljabatan');
+
+        if($jenisprogram == 'lainnya-jenisprogram'){
+            $data['jenisiprogram'] = $request->get('jenisprogram_lainnya');
+        }else{
+            $data['jenisprogram'] = $jenisprogram;
+        }
+        
         if($didaftarkanoleh == 'lainnya'){
             $data['didaftarkanoleh'] = $request->get('didaftarkanoleh_lainnya');
         }else{
@@ -216,6 +225,12 @@ class DatapesertaController extends Controller
             $data['mengetahuidb'] = $request->get('mengetahuidb_lainnya');
         }else{
             $data['mengetahuidb'] = $mengetahuidb;
+        }
+
+        if($jenisindustri == 'lain-lain'){
+            $data['jenisindustri'] = $request->get('jenisindustri_lainnya');
+        }else{
+            $data['jenisindustri'] = $jenisindustri;
         }
 
         if($leveljabatan == 'lain-lainnya'){
@@ -342,6 +357,41 @@ class DatapesertaController extends Controller
 
         $data['nis'] = $prefix.$substrnonis;
 
+        $jenisprogram = $request->get('jenisprogram');
+        $didaftarkanoleh = $request->get('didaftarkanoleh');
+        $mengetahuidb = $request->get('mengetahuidb');
+        $jenisindustri = $request->get('jenisindustri');
+        $leveljabatan = $request->get('leveljabatan');
+
+        if($jenisprogram == 'lainnya-jenisprogram'){
+            $data['jenisiprogram'] = $request->get('jenisprogram_lainnya');
+        }else{
+            $data['jenisprogram'] = $jenisprogram;
+        }
+
+        if($didaftarkanoleh == 'lainnya'){
+            $data['didaftarkanoleh'] = $request->get('didaftarkanoleh_lainnya');
+        }else{
+            $data['didaftarkanoleh'] = $didaftarkanoleh;
+        }
+
+        if($mengetahuidb == 'Lainnya'){
+            $data['mengetahuidb'] = $request->get('mengetahuidb_lainnya');
+        }else{
+            $data['mengetahuidb'] = $mengetahuidb;
+        }
+
+        if($jenisindustri == 'lain-lain'){
+            $data['jenisindustri'] = $request->get('jenisindustri_lainnya');
+        }else{
+            $data['jenisindustri'] = $jenisindustri;
+        }
+
+        if($leveljabatan == 'lain-lainnya'){
+            $data['leveljabatan'] = $request->get('leveljabatan_lainnya');
+        }else{
+            $data['leveljabatan'] = $leveljabatan;
+        }
 
         // Tanggal Lahir
         $birthday = $request->get('tanggallahir');

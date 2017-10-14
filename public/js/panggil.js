@@ -47,6 +47,17 @@
             }
         });
 
+        $('#jenisprogram').on('change', function() {
+            if ( this.value == 'lainnya-jenisprogram')
+            {
+                $("#lainnya-jenisprogram").show();
+            }
+            else
+            {
+                $("#lainnya-jenisprogram").hide();
+            }
+        });
+
         $('#didaftarkanoleh').on('change', function() {
             if ( this.value == 'lainnya')
             {
@@ -69,7 +80,7 @@
             }
         });
 
-         $('#leveljabatan').on('change', function() {
+        $('#leveljabatan').on('change', function() {
             if ( this.value == 'lain-lainnya')
             {
                 $("#lain-lainnya").show();
@@ -77,6 +88,17 @@
             else
             {
                 $("#lain-lainnya").hide();
+            }
+        });
+
+        $('#jenisindustri').on('change', function() {
+            if ( this.value == 'lain-lain')
+            {
+                $("#lainnya-jenisindustri").show();
+            }
+            else
+            {
+                $("#lainnya-jenisindustri").hide();
             }
         });
 

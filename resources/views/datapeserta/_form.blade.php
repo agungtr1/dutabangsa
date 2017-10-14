@@ -48,6 +48,26 @@
 
 <!-- SHOW - - - HIDE !-->
 <div style='display:none;background-color: #eaf0eb;' id='reguler'>
+    
+    <div class="form-group{{ $errors->has('jenisprogram') ? 'has-error' : '' }}">
+        {!! Form::label('jenisprogram', 'Jenis Program', ['class'=>'col-md-5 control-label']) !!}
+        <div class="col-md-5">
+            {!! Form::select('jenisprogram', ['intensif'=>'Intensif','weekend'=>'Weekend','weekday'=>'Weekday','nightclass'=>'NightClass','lainnya-jenisprogram'=>'Lainnya'], null, ['id'=>'jenisprogram','class'=>'form-control','placeholder' => 'Jenis Program']) !!}
+            {!! $errors->first('jenisprogram', '<p class="help-block">:message</p>') !!}
+        </div>
+    </div>
+
+    <!-- SHOW - - - HIDE !-->
+    <div style='display:none;background-color: #eaf0eb;' id='lainnya-jenisprogram'>
+        <div class="form-group{{ $errors->has('jenisprogram_lainnya') ? 'has-error' : '' }}">
+            {!! Form::label('jenisprogram_lainnya', 'Lainnya', ['class'=>'col-md-6 control-label']) !!}
+            <div class="col-md-5">
+                {!! Form::text('jenisprogram_lainnya', null, ['class'=>'form-control','placeholder'=>'Ketik Lainnya']) !!}
+                {!! $errors->first('jenisprogram_lainnya', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
+    </div>
+    <!-- END SHOW - - - HIDE !--> 
 
     <div class="form-group{{ $errors->has('tempatlahir') ? 'has-error' : '' }}">
         {!! Form::label('tempatlahir', 'Tempat Kelahiran', ['class'=>'col-md-5 control-label']) !!}
@@ -190,10 +210,22 @@
     <div class="form-group{{ $errors->has('jenisindustri') ? ' has-error' : '' }}">
         {!! Form::label('jenisindustri', 'Jenis Industri', ['class'=>'col-md-5 control-label']) !!}
         <div class="col-md-5" style="text-transform: uppercase;">
-            {!! Form::select('jenisindustri', [''=>'']+App\Jenisindustri::pluck('name','name')->all(), null, ['id'=>'jenisindustri','class'=>'form-control js-selectize','placeholder' => 'Jenis Industri']) !!}
+            {!! Form::select('jenisindustri', [''=>'']+App\Jenisindustri::pluck('name','name')->all(), null, ['id'=>'jenisindustri','class'=>'form-control','placeholder' => 'Jenis Industri']) !!}
             {!! $errors->first('jenisindustri', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
+
+    <!-- SHOW - - - HIDE !-->
+    <div style='display:none;background-color: #eaf0eb;' id='lainnya-jenisindustri'>
+        <div class="form-group{{ $errors->has('jenisindustri_lainnya') ? 'has-error' : '' }}">
+            {!! Form::label('jenisindustri_lainnya', 'Lainnya', ['class'=>'col-md-6 control-label']) !!}
+            <div class="col-md-5">
+                {!! Form::text('jenisindustri_lainnya', null, ['class'=>'form-control','placeholder'=>'Ketik Lainnya']) !!}
+                {!! $errors->first('jenisindustri_lainnya', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
+    </div>
+    <!-- END SHOW - - - HIDE !-->
 
     <div class="form-group{{ $errors->has('departemenpeserta') ? 'has-error' : '' }}">
         {!! Form::label('departemenpeserta', 'Departemen Peserta', ['class'=>'col-md-5 control-label']) !!}
@@ -315,9 +347,18 @@
 <div class="form-group{{ $errors->has('akuninstagram') ? 'has-error' : '' }}">
     {!! Form::label('akuninstagram', 'Akun Instagram', ['class'=>'col-md-4 control-label']) !!}
     <div class="col-md-6">
-        {!! Form::text('akuninstagram', null, ['class'=>'form-control','placeholder'=>'Instagram']) !!}
+        {!! Form::text('akuninstagram', '@', ['class'=>'form-control','placeholder'=>'Instagram']) !!}
         <small>bila ada</small>
         {!! $errors->first('akuninstagram', '<p class="help-block">:message</p>') !!}
+    </div>
+</div>
+
+<div class="form-group{{ $errors->has('linkedin') ? 'has-error' : '' }}">
+    {!! Form::label('linkedin', 'Linked In', ['class'=>'col-md-4 control-label']) !!}
+    <div class="col-md-6">
+        {!! Form::text('linkedin', null, ['class'=>'form-control','placeholder'=>'Linked In']) !!}
+        <small>bila ada</small>
+        {!! $errors->first('linkedin', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 
